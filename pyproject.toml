@@ -1,0 +1,27 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "master-check"
+dynamic = ["version"]
+description = "Master Check: release QC for finished masters"
+readme = "README.md"
+license = {text = "MIT"}
+authors = [{name = "Axel (ROMMUSER)"}]
+requires-python = ">=3.10"
+dependencies = ["numpy>=1.26", "scipy>=1.11", "soundfile>=0.12"]
+
+[project.scripts]
+master-check = "master_check.cli:main"
+master-check-gui = "master_check.gui:main"
+
+[project.urls]
+Homepage = "https://github.com/axelfj/master-check"
+Issues = "https://github.com/axelfj/master-check/issues"
+
+[tool.setuptools]
+packages = ["master_check"]
+
+[tool.setuptools.dynamic]
+version = {attr = "master_check.__version__"}
