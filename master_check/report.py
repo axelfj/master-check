@@ -53,7 +53,7 @@ def text(results):
 
 
 def to_json(results):
-    return json.dumps({"app": APP_NAME, "version": __version__, "results": results}, indent=2)
+    return json.dumps({"app": APP_NAME, "version": __version__, "results": results}, indent=2, allow_nan=False)
 
 
 CSS = """
@@ -98,3 +98,4 @@ def to_html(results):
     out.append("<p><small>Loudness per ITU-R BS.1770-5, LRA per EBU Tech 3342. Platform "
                "values marked estimated in the source are not published by the platform.</small>")
     return "\n".join(out)
+

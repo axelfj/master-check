@@ -162,4 +162,5 @@ def analyze(path, profile_ids=None):
 
 def _clean(m):
     """JSON has no -inf; silence reads as null."""
-    return {k: (None if isinstance(v, float) and math.isinf(v) else v) for k, v in m.items()}
+    return {k: (None if isinstance(v, float) and not math.isfinite(v) else v) for k, v in m.items()}
+
