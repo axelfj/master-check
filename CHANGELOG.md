@@ -1,5 +1,10 @@
 # Changelog
 
+## Unreleased: V2 preparation
+
+- Rechazar audio vacío/no finito antes de medir; JSON estricto y regresiones en CI.
+- Todavía no constituye una versión V2 publicada ni valida binarios nativos.
+
 All notable changes to Master Check are listed here. Versions follow
 [Semantic Versioning](https://semver.org).
 
@@ -17,3 +22,4 @@ First release.
 - Reads WAV (including RF64 and 32-bit float), AIFF, FLAC, MP3 and OGG.
 - Window app plus command line, with HTML and JSON reports.
 - Windows installer and macOS (Apple silicon) disk image.
+
