@@ -144,7 +144,7 @@ def check_profile(profile, fmt, m):
         "id": profile["id"],
         "name": profile["name"],
         "gain_db": gain,
-        "playback_lufs": i + gain if i != loudness.NEG_INF else i,
+        "playback_lufs": i + gain if math.isfinite(i) else None,
         "status": worst(out),
         "findings": out,
     }

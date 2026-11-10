@@ -100,8 +100,7 @@ def main():
             return
         body = report.to_html(state["results"]) if kind == "html" else report.to_json(
             state["results"])
-        with open(path, "w", encoding="utf-8") as f:
-            f.write(body)
+        report.save(path, body)
         status.configure(text="Saved %s" % path)
 
     tk.Button(bar, text="Check files...", width=16, command=add_files).pack(side="left", padx=4)

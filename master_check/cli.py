@@ -46,9 +46,7 @@ def main(argv=None):
     results = run(files, ids)
     print(report.text(results))
     if args.json:
-        with open(args.json, "w", encoding="utf-8") as f:
-            f.write(report.to_json(results))
+        report.save(args.json, report.to_json(results))
     if args.html:
-        with open(args.html, "w", encoding="utf-8") as f:
-            f.write(report.to_html(results))
+        report.save(args.html, report.to_html(results))
     return 1 if any(r["status"] == "fail" for r in results) else 0

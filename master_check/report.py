@@ -3,6 +3,7 @@ import html
 import json
 import os
 import time
+import tempfile
 
 from . import APP_NAME, __version__
 
@@ -43,8 +44,8 @@ def text(results):
         lines.append("")
         lines.append("   %-17s %8s %10s  %s" % ("Platform", "Gain", "Playback", "Status"))
         for p in r["platforms"]:
-            lines.append("   %-17s %+7.1f dB %6.1f LUFS  %s" % (
-                p["name"], p["gain_db"], p["playback_lufs"], LABEL[p["status"]]))
+            lines.append("   %-17s %+7.1f dB %10s  %s" % (
+                p["name"], p["gain_db"], _num(p["playback_lufs"], "%.1f LUFS"), LABEL[p["status"]]))
             for f in p["findings"]:
                 if f["level"] != "info":
                     lines.append("      %-5s %s" % (LABEL[f["level"]], f["message"]))
@@ -90,12 +91,27 @@ def to_html(results):
                    "<th>Status</th><th>Notes</th></tr>")
         for p in r["platforms"]:
             notes = "<br>".join(e(f["message"]) for f in p["findings"])
-            out.append("<tr><td>%s</td><td>%+.1f dB</td><td>%.1f LUFS</td>"
+            out.append("<tr><td>%s</td><td>%+.1f dB</td><td>%s</td>"
                        "<td class=%s>%s</td><td>%s</td></tr>" % (
-                           e(p["name"]), p["gain_db"], p["playback_lufs"], p["status"],
+                           e(p["name"]), p["gain_db"], _num(p["playback_lufs"], "%.1f LUFS"), p["status"],
                            LABEL[p["status"]], notes))
         out.append("</table>")
     out.append("<p><small>Loudness per ITU-R BS.1770-5, LRA per EBU Tech 3342. Platform "
                "values marked estimated in the source are not published by the platform.</small>")
     return "\n".join(out)
 
+
+
+def save(path, body):
+    """Publish a fully serialized report without truncating an older one."""
+    path = os.path.abspath(path)
+    temporary = None
+    try:
+        with tempfile.NamedTemporaryFile(mode="w", encoding="utf-8", dir=os.path.dirname(path),
+                                         prefix=".master-check-", delete=False) as stream:
+            temporary = stream.name
+            stream.write(body)
+        os.replace(temporary, path)
+    finally:
+        if temporary is not None and os.path.exists(temporary):
+            os.unlink(temporary)
